@@ -7,12 +7,13 @@ const db = admin.database();
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
 // Singela aplicação simuladora de um algoritmo que substitui palavrões ao serem inseridos no 
-// realtime database. Feita com ajudo do firebase e cloud functions
+// realtime database. Feita com ajuda do firebase e cloud functions
 
-// adiciona um novo objeto no realtime database com nome, mensagem e time.
+// adiciona um novo objeto no realtime database com nome, mensagem e time (clube de futebol, não tempo).
 exports.newMessage = functions.https.onRequest( async (req, res) => {
   const { nome, mensagem, time } = req.body;
   
+  //insere os dados no caminho especificado 
   const usuario = db.ref('root').child('usuarios').child('mensagens');
   await usuario.push({nome, mensagem, time});
   
@@ -26,7 +27,6 @@ exports.searchAwfulWords = functions.database.
 ref('/root/{usuarios}/mensagens/{mensagemId}')
 .onCreate((snapshot, context) => {
   const dadosMensagem = snapshot.val();
-  console.log(dadosMensagem);
   const text = verifyAwfulWord(dadosMensagem.mensagem); //string
   return snapshot.ref.update({mensagem: text});
 })
